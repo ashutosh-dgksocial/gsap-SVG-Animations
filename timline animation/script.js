@@ -2,6 +2,7 @@ let tl = gsap.timeline({ paused: true });
 
 let burger = document.querySelector("#burger");
 let close_ico = document.querySelector("#close_ico");
+let navBox = document.querySelector("#nav_box");
 
 tl.to("#nav_box", {
   right: 0,
@@ -20,14 +21,23 @@ tl.from('#close_ico', {
 });
 
 // Event Listeners
-burger.addEventListener('click', function () {
+burger.addEventListener('click', function (event) {
   tl.play();
+  event.stopPropagation();
+  console.log(event)
 });
 
 close_ico.addEventListener('click', function () {
   tl.reverse();
 });
 
+document.addEventListener('click', function (event) {
+  const closing = !navBox.contains(event.target) && !burger.contains(event.target); // true && true
+  // if navBox & burger event = false || undefined || null then return true
+  if (closing) { // if clo... true then sh*** will happen
+    tl.reverse();
+  }
+});
 
 // burger.addEventListener('click', function () {
 
