@@ -1,35 +1,42 @@
-import React, { useEffect, useRef } from "react";
-import { gsap } from "gsap";
+import React, { useRef, useEffect } from "react";
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
+gsap.registerPlugin(useGSAP);
 
-function Home() {
-  const app = useRef(null);
-  const circle = useRef(null);
+const Home = () => {
+  const textRef = useRef(null);
 
   useEffect(() => {
-    gsap.to(app.current, {
-      rotate: 360,
-      repeat: -1,
-    });
-    // differenet
- 
-  }, []);
-  gsap.to(circle.current, {
+    // Har letter ko span me wrap karna
+    const text = textRef.current;
+    const letters = text.innerText.split("");
+    text.innerHTML = letters.map((letter) => `<span class="letter">${letter}</span>`).join("");
+
+    gsap.from(".letter", {
       opacity: 0,
       x: 100,
-
+      duration: 0.5,
+      stagger: 0.1, // Ek ek letter aayega
+      ease: "power2.out",
     });
 
+    gsap.to(".square", {
+      x: 100,
+      duration: 0.5,
+      delay: 0.1,
+      rotate: 180,
+    });
+  }, []);
+
   return (
-    <div className="home-page px-20">
-      <div ref={app} className="square w-20 h-20 bg-red-200 text-black">
-        Hello World
-      </div>
-      <br />
-      <div ref={circle} className="center rounded-full bg-blue-500 w-28 h-28">
-        CIRCLE
+    <div>
+      <h1>GSAP Stagger Effect</h1>
+      <div className="flex">
+        <p ref={textRef} className="text-[100px]">REGISTER</p>
+        <div className="square w-10 h-40 bg-white rounded-full bg-[radial-gradient(at_25%_25%,_white,_#18181b_75%)]"></div>
       </div>
     </div>
   );
-}
+};
 
 export default Home;
